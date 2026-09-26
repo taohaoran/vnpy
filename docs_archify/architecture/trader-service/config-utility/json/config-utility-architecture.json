@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": { "title": "config-utility 组件架构图", "quality_profile": "showcase", "locale": "zh-CN" },
+  "components": [
+    { "id": "tick", "type": "external", "label": "Tick/Bar 数据", "pos": [60, 120], "size": [140, 60] },
+    { "id": "util", "type": "backend", "label": "通用工具函数", "pos": [60, 300], "size": [140, 60], "tag": "路径/JSON/取整" },
+    { "id": "settings", "type": "backend", "label": "SETTINGS 配置", "pos": [60, 440], "size": [140, 60], "tag": "vt_setting.json" },
+    { "id": "logger", "type": "backend", "label": "loguru 日志", "pos": [260, 440], "size": [130, 60] },
+    { "id": "bgen", "type": "backend", "label": "BarGenerator", "pos": [440, 120], "size": [150, 60], "tag": "K线合成" },
+    { "id": "amgr", "type": "backend", "label": "ArrayManager", "pos": [440, 300], "size": [150, 60], "tag": "滑动窗口+指标" },
+    { "id": "talib", "type": "external", "label": "TA-Lib 指标库", "pos": [700, 300], "size": [140, 60] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "vnpy/trader 工具层（本仓库源码内）", "wraps": ["util", "settings", "logger", "bgen", "amgr"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "tick", "to": "bgen", "label": "update_tick", "variant": "emphasis" },
+    { "id": "c2", "from": "bgen", "to": "amgr", "label": "合成后Bar", "variant": "emphasis", "labelDy": 30 },
+    { "id": "c3", "from": "amgr", "to": "talib", "label": "指标计算", "variant": "emphasis" },
+    { "id": "c4", "from": "settings", "to": "logger", "label": "日志配置", "variant": "dashed" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "主路径", "items": ["Tick→BarGenerator→多周期Bar→ArrayManager→TA-Lib", "配置与日志为横切关注点"] }
+  ]
+}

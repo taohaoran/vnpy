@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": { "title": "事件→UI 刷新时序", "quality_profile": "showcase", "locale": "zh-CN", "viewBox": [1080, 700] },
+  "participants": [
+    { "id": "gw", "type": "external", "label": "网关线程" },
+    { "id": "ee", "type": "external", "label": "EventEngine" },
+    { "id": "sig", "type": "backend", "label": "Qt信号" },
+    { "id": "slot", "type": "backend", "label": "Monitor槽" },
+    { "id": "tbl", "type": "frontend", "label": "监控表格" }
+  ],
+  "messages": [
+    { "id": "m1", "from": "gw", "to": "ee", "y": 160, "label": "推送Tick事件", "variant": "emphasis" },
+    { "id": "m2", "from": "ee", "to": "sig", "y": 220, "label": "signal.emit(event)" },
+    { "id": "m3", "from": "sig", "to": "slot", "y": 280, "label": "队列投递到主线程", "variant": "return" },
+    { "id": "m4", "from": "slot", "to": "tbl", "y": 350, "label": "insert/update行" },
+    { "id": "m5", "from": "tbl", "to": "slot", "y": 410, "label": "刷新显示", "variant": "return" }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "因子特征工程架构图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN"
+  },
+  "components": [
+    { "id": "ds", "type": "backend", "label": "AlphaDataset", "pos": [380, 180], "size": [160, 60], "tag": "数据集模板" },
+    { "id": "proxy", "type": "backend", "label": "DataProxy", "pos": [60, 80], "size": [150, 56], "tag": "运算符重载" },
+    { "id": "engine", "type": "backend", "label": "表达式引擎", "pos": [60, 200], "size": [150, 56], "tag": "eval" },
+    { "id": "funcs", "type": "backend", "label": "ts/cs/ta/math库", "pos": [60, 320], "size": [150, 56], "tag": "算子注册" },
+    { "id": "proc", "type": "backend", "label": "processor链", "pos": [720, 80], "size": [150, 56], "tag": "预处理" },
+    { "id": "builtin", "type": "backend", "label": "Alpha101/158", "pos": [720, 200], "size": [150, 56], "tag": "内置因子集" },
+    { "id": "pool", "type": "messagebus", "label": "多进程池", "pos": [720, 320], "size": [150, 56], "tag": "并行计算" },
+    { "id": "pl", "type": "external", "label": "polars/TA-Lib", "pos": [380, 380], "size": [160, 56], "tag": "不在本仓库" }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "vnpy.alpha.dataset", "wraps": ["ds", "proxy", "engine", "funcs", "proc", "builtin", "pool"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "engine", "to": "proxy", "label": "列包装", "variant": "default" },
+    { "id": "c2", "from": "engine", "to": "funcs", "variant": "emphasis" },
+    { "id": "c3", "from": "ds", "to": "engine", "label": "eval表达式", "variant": "emphasis" },
+    { "id": "c4", "from": "ds", "to": "pool", "label": "并行算因子", "variant": "default" },
+    { "id": "c5", "from": "ds", "to": "proc", "label": "process_data", "variant": "default" },
+    { "id": "c6", "from": "builtin", "to": "ds", "variant": "dashed" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "要点", "items": [
+      "表达式DSL+算子库",
+      "多进程并行算因子",
+      "processor可插拔预处理链"
+    ]}
+  ]
+}

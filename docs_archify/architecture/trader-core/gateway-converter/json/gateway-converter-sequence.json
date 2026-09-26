@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "平仓换算拆单调用时序",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [1080, 580]
+  },
+  "participants": [
+    { "id": "strategy", "type": "external", "label": "策略" },
+    { "id": "oms", "type": "backend", "label": "OmsEngine" },
+    { "id": "conv", "type": "backend", "label": "换算器" },
+    { "id": "holding", "type": "database", "label": "持仓对象" },
+    { "id": "gw", "type": "external", "label": "网关" }
+  ],
+  "messages": [
+    { "id": "m1", "from": "strategy", "to": "oms", "y": 160, "label": "convert_order_request(req)", "variant": "emphasis" },
+    { "id": "m2", "from": "oms", "to": "conv", "y": 215, "label": "按网关取 converter" },
+    { "id": "m3", "from": "conv", "to": "holding", "y": 270, "label": "取持仓对象" },
+    { "id": "m4", "from": "holding", "to": "conv", "y": 325, "label": "返回持仓", "variant": "return" },
+    { "id": "m5", "from": "conv", "to": "holding", "y": 380, "label": "shfe/lock/net 拆单" },
+    { "id": "m6", "from": "conv", "to": "oms", "y": 435, "label": "返回拆分列表", "variant": "return" },
+    { "id": "m7", "from": "oms", "to": "gw", "y": 490, "label": "逐笔 send_order", "variant": "dashed" }
+  ]
+}

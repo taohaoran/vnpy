@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "EventEngine 组件架构图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN"
+  },
+  "components": [
+    { "id": "client", "type": "external", "label": "网关注册者", "pos": [40, 190], "size": [140, 60] },
+    { "id": "ee", "type": "backend", "label": "EventEngine", "pos": [280, 180], "size": [150, 80], "tag": "事件驱动核心" },
+    { "id": "queue", "type": "messagebus", "label": "内部 Queue", "pos": [560, 50], "size": [140, 56] },
+    { "id": "wthread", "type": "backend", "label": "分发工作线程", "pos": [560, 170], "size": [140, 56] },
+    { "id": "tthread", "type": "backend", "label": "定时器线程", "pos": [560, 290], "size": [140, 56] },
+    { "id": "handlers", "type": "database", "label": "handlers 字典", "pos": [560, 410], "size": [140, 56] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "client", "to": "ee", "label": "register/put", "variant": "emphasis" },
+    { "id": "c2", "from": "ee", "to": "queue", "label": "持有", "variant": "default" },
+    { "id": "c3", "from": "ee", "to": "wthread", "label": "start", "variant": "default" },
+    { "id": "c4", "from": "ee", "to": "tthread", "label": "start", "variant": "dashed" },
+    { "id": "c5", "from": "ee", "to": "handlers", "label": "注册回调", "variant": "default" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "核心机制", "items": [
+      "单分发线程串行处理事件",
+      "defaultdict 注册类型处理器",
+      "通用处理器广播所有事件",
+      "定时器线程每秒产 eTimer"
+    ] }
+  ]
+}

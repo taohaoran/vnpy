@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "MainEngine 下单调用链时序",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [1080, 640]
+  },
+  "participants": [
+    { "id": "strategy", "type": "external", "label": "策略/上层" },
+    { "id": "mainengine", "type": "backend", "label": "MainEngine" },
+    { "id": "gateway", "type": "external", "label": "交易网关" },
+    { "id": "eventengine", "type": "messagebus", "label": "EventEngine" },
+    { "id": "omsengine", "type": "backend", "label": "OmsEngine" }
+  ],
+  "messages": [
+    { "id": "m1", "from": "strategy", "to": "mainengine", "y": 160, "label": "send_order(req, gateway)", "variant": "emphasis" },
+    { "id": "m2", "from": "mainengine", "to": "gateway", "y": 230, "label": "gateway.send_order(req)" },
+    { "id": "m3", "from": "gateway", "to": "eventengine", "y": 300, "label": "on_order 推送 EVENT_ORDER" },
+    { "id": "m4", "from": "eventengine", "to": "omsengine", "y": 370, "label": "process_order_event" },
+    { "id": "m5", "from": "gateway", "to": "mainengine", "y": 440, "label": "返回 vt_orderid", "variant": "return" },
+    { "id": "m6", "from": "mainengine", "to": "strategy", "y": 510, "label": "返回 vt_orderid", "variant": "return" }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "alpha 研究流程时序图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [1080, 760]
+  },
+  "participants": [
+    { "id": "user", "type": "external", "label": "研究员" },
+    { "id": "lab", "type": "database", "label": "AlphaLab" },
+    { "id": "ds", "type": "backend", "label": "AlphaDataset" },
+    { "id": "model", "type": "backend", "label": "AlphaModel" },
+    { "id": "bt", "type": "backend", "label": "回测引擎" }
+  ],
+  "messages": [
+    { "id": "m1", "from": "user", "to": "lab", "y": 160, "label": "save_bar_data 落盘" },
+    { "id": "m2", "from": "user", "to": "ds", "y": 220, "label": "add_feature 注册因子" },
+    { "id": "m3", "from": "ds", "to": "lab", "y": 280, "label": "load_bar_df 取长表", "variant": "return" },
+    { "id": "m5", "from": "user", "to": "model", "y": 360, "label": "fit(dataset)" },
+    { "id": "m6", "from": "model", "to": "ds", "y": 420, "label": "fetch_learn 训练矩阵", "variant": "return" },
+    { "id": "m7", "from": "model", "to": "user", "y": 480, "label": "predict 产出信号", "variant": "return" },
+    { "id": "m8", "from": "user", "to": "bt", "y": 540, "label": "run_backtesting" },
+    { "id": "m9", "from": "bt", "to": "lab", "y": 600, "label": "load_bar_data 历史", "variant": "return" },
+    { "id": "m10", "from": "bt", "to": "user", "y": 660, "label": "绩效统计结果", "variant": "return" }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "遗传算法进化生命周期",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [
+      1500,
+      620
+    ]
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "GA 进化阶段"
+    }
+  ],
+  "states": [
+    {
+      "id": "init",
+      "type": "start",
+      "label": "初始化种群",
+      "lane": "main",
+      "col": 0
+    },
+    {
+      "id": "eval",
+      "type": "active",
+      "label": "评估个体",
+      "lane": "main",
+      "col": 1
+    },
+    {
+      "id": "select",
+      "type": "active",
+      "label": "选择交叉变异",
+      "lane": "main",
+      "col": 2
+    },
+    {
+      "id": "next",
+      "type": "decision",
+      "label": "达到ngen",
+      "lane": "main",
+      "col": 3
+    },
+    {
+      "id": "done",
+      "type": "success",
+      "label": "返回结果",
+      "lane": "main",
+      "col": 4
+    }
+  ],
+  "transitions": [
+    {
+      "from": "init",
+      "to": "eval",
+      "label": "开始",
+      "labelDy": 80
+    },
+    {
+      "from": "eval",
+      "to": "select",
+      "label": "评估完成",
+      "labelDy": 80
+    },
+    {
+      "from": "select",
+      "to": "next",
+      "label": "产生后代",
+      "labelDy": 80
+    },
+    {
+      "from": "next",
+      "to": "eval",
+      "label": "否",
+      "route": "bottom-channel",
+      "labelDy": 80
+    },
+    {
+      "from": "next",
+      "to": "done",
+      "label": "是",
+      "labelDy": 80
+    }
+  ]
+}

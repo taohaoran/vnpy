@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "vnpy 行情与交易数据流图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [1200, 680]
+  },
+  "stages": [
+    { "label": "数据源" },
+    { "label": "接入层" },
+    { "label": "事件总线" },
+    { "label": "消费层" },
+    { "label": "存储" }
+  ],
+  "nodes": [
+    { "id": "exchange", "type": "external", "label": "交易所", "stage": 0, "row": 0 },
+    { "id": "datavendor", "type": "external", "label": "数据供应商", "stage": 0, "row": 1 },
+    { "id": "gateway", "type": "backend", "label": "BaseGateway", "stage": 1, "row": 0 },
+    { "id": "datafeed", "type": "cloud", "label": "BaseDatafeed", "stage": 1, "row": 1 },
+    { "id": "eventengine", "type": "messagebus", "label": "EventEngine", "stage": 2, "row": 0 },
+    { "id": "oms", "type": "backend", "label": "OmsEngine", "stage": 3, "row": 0 },
+    { "id": "mainwindow", "type": "frontend", "label": "MainWindow", "stage": 3, "row": 1 },
+    { "id": "chart", "type": "frontend", "label": "K线图表", "stage": 3, "row": 2 },
+    { "id": "database", "type": "database", "label": "BaseDatabase", "stage": 3, "row": 3 },
+    { "id": "dbproduct", "type": "external", "label": "数据库产品", "stage": 4, "row": 3 }
+  ],
+  "flows": [
+    { "from": "exchange", "to": "gateway", "label": "实时行情/回报", "variant": "emphasis", "route": "straight" },
+    { "from": "datavendor", "to": "datafeed", "label": "历史K线", "variant": "default", "route": "straight" },
+    { "from": "gateway", "to": "eventengine", "label": "行情事件", "variant": "emphasis", "route": "straight" },
+    { "from": "datafeed", "to": "eventengine", "label": "数据事件", "variant": "default", "route": "vertical-channel" },
+    { "from": "eventengine", "to": "oms", "label": "订单事件", "variant": "emphasis", "route": "straight", "labelDy": -22 },
+    { "from": "eventengine", "to": "mainwindow", "label": "UI", "variant": "default", "route": "straight", "labelAt": [830, 195] },
+    { "from": "eventengine", "to": "chart", "label": "行情", "variant": "default", "route": "straight", "labelDy": -8 },
+    { "from": "eventengine", "to": "database", "label": "落库", "variant": "default", "route": "straight", "labelDy": 36 },
+    { "from": "database", "to": "dbproduct", "label": "持久化", "variant": "default", "route": "straight" }
+  ]
+}

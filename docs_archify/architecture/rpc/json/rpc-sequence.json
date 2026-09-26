@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "心跳与订阅推送时序图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [1080, 700]
+  },
+  "participants": [
+    { "id": "srv", "type": "backend", "label": "RpcServer" },
+    { "id": "pub", "type": "messagebus", "label": "PUB/SUB" },
+    { "id": "cli", "type": "frontend", "label": "RpcClient" },
+    { "id": "cb", "type": "external", "label": "业务回调" }
+  ],
+  "messages": [
+    { "id": "m1", "from": "srv", "to": "pub", "y": 160, "label": "每10s 心跳 publish", "variant": "dashed" },
+    { "id": "m2", "from": "pub", "to": "cli", "y": 225, "label": "心跳主题推送", "variant": "dashed" },
+    { "id": "m3", "from": "srv", "to": "pub", "y": 300, "label": "业务 publish(topic,data)", "variant": "emphasis" },
+    { "id": "m4", "from": "pub", "to": "cli", "y": 365, "label": "订阅消息到达", "variant": "emphasis" },
+    { "id": "m5", "from": "cli", "to": "cb", "y": 430, "label": "callback(topic,data)", "variant": "emphasis" },
+    { "id": "m6", "from": "cli", "to": "cb", "y": 510, "label": "30s 无消息 on_disconnected", "variant": "dashed" }
+  ]
+}

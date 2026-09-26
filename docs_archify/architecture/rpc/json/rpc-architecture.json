@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "RPC 域架构图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN"
+  },
+  "components": [
+    { "id": "engine", "type": "frontend", "label": "MainEngine", "pos": [60, 100], "size": [150, 60], "tag": "本地主引擎" },
+    { "id": "server", "type": "backend", "label": "RpcServer", "pos": [60, 240], "size": [150, 60], "tag": "函数注册表+分派" },
+    { "id": "rep", "type": "messagebus", "label": "REP socket", "pos": [400, 180], "size": [140, 54] },
+    { "id": "pub", "type": "messagebus", "label": "PUB socket", "pos": [400, 320], "size": [140, 54] },
+    { "id": "client", "type": "frontend", "label": "RpcClient", "pos": [740, 240], "size": [150, 60], "tag": "远程代理+回调" },
+    { "id": "remote", "type": "external", "label": "远程业务进程", "pos": [740, 380], "size": [150, 60], "tag": "GUI/策略进程" }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "服务端进程（本地）", "wraps": ["engine", "server"] },
+    { "kind": "region", "label": "客户端进程（远程）", "wraps": ["client", "remote"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "engine", "to": "server", "variant": "emphasis" },
+    { "id": "c2", "from": "server", "to": "rep", "label": "bind", "variant": "default" },
+    { "id": "c3", "from": "server", "to": "pub", "label": "心跳/推送", "variant": "dashed" },
+    { "id": "c4", "from": "rep", "to": "client", "label": "请求应答", "variant": "emphasis" },
+    { "id": "c5", "from": "pub", "to": "client", "label": "订阅广播", "variant": "dashed" },
+    { "id": "c6", "from": "client", "to": "remote", "variant": "default" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "域职责", "items": [
+      "跨进程透明方法调用",
+      "发布订阅行情/事件推送",
+      "心跳保活与断线告警"
+    ]}
+  ]
+}

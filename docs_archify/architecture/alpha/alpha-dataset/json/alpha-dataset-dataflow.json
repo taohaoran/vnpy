@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "因子计算数据流图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [1200, 380]
+  },
+  "stages": [
+    { "label": "原始数据" },
+    { "label": "因子计算" },
+    { "label": "预处理" },
+    { "label": "三时段输出" }
+  ],
+  "nodes": [
+    { "id": "n1", "type": "database", "label": "长表df", "stage": 0, "row": 0 },
+    { "id": "n2", "type": "backend", "label": "表达式并行计算", "stage": 1, "row": 0 },
+    { "id": "n3", "type": "backend", "label": "processor链", "stage": 2, "row": 0 },
+    { "id": "n4", "type": "database", "label": "learn/infer矩阵", "stage": 3, "row": 0 }
+  ],
+  "flows": [
+    { "from": "n1", "to": "n2", "label": "add_feature表达式", "variant": "emphasis" },
+    { "from": "n2", "to": "n3", "label": "result_df", "variant": "emphasis" },
+    { "from": "n3", "to": "n4", "label": "fetch_learn/infer", "variant": "emphasis" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "特征管线", "items": [
+      "原始长表→并行因子",
+      "→预处理→三段矩阵",
+      "供模型训练/推理"
+    ]}
+  ]
+}

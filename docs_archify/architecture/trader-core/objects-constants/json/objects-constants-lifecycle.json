@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "委托活跃状态流转",
+    "quality_profile": "showcase",
+    "locale": "zh-CN"
+  },
+  "lanes": [
+    { "id": "main", "label": "委托状态" }
+  ],
+  "states": [
+    { "id": "active", "type": "active", "label": "活跃中", "lane": "main", "col": 0 },
+    { "id": "done", "type": "success", "label": "已完结", "lane": "main", "col": 1 }
+  ],
+  "transitions": [
+    { "from": "active", "to": "done", "label": "完结" }
+  ]
+}

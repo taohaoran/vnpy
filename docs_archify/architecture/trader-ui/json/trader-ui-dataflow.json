@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": { "title": "trader-ui 事件流", "quality_profile": "showcase", "locale": "zh-CN", "viewBox": [1150, 380] },
+  "stages": [
+    { "label": "行情事件" },
+    { "label": "事件分发" },
+    { "label": "Qt信号" },
+    { "label": "主线程槽" },
+    { "label": "表格刷新" }
+  ],
+  "nodes": [
+    { "id": "gw", "type": "external", "label": "网关推送", "stage": 0, "row": 0 },
+    { "id": "ee", "type": "external", "label": "EventEngine", "stage": 1, "row": 0 },
+    { "id": "sig", "type": "backend", "label": "Signal.emit", "stage": 2, "row": 0 },
+    { "id": "slot", "type": "backend", "label": "process_event", "stage": 3, "row": 0 },
+    { "id": "tbl", "type": "frontend", "label": "监控表格", "stage": 4, "row": 0 }
+  ],
+  "flows": [
+    { "from": "gw", "to": "ee", "label": "Tick/订单事件", "variant": "default", "route": "straight" },
+    { "from": "ee", "to": "sig", "label": "emit", "variant": "default", "route": "straight" },
+    { "from": "sig", "to": "slot", "label": "队列投递", "variant": "emphasis", "route": "straight" },
+    { "from": "slot", "to": "tbl", "label": "增改行", "variant": "emphasis", "route": "straight" }
+  ]
+}

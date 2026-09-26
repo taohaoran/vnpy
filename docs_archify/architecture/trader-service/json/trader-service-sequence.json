@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": { "title": "trader-service 启动装配时序", "quality_profile": "showcase", "locale": "zh-CN", "viewBox": [1080, 720] },
+  "participants": [
+    { "id": "eng", "type": "external", "label": "MainEngine" },
+    { "id": "log", "type": "backend", "label": "logger" },
+    { "id": "dbf", "type": "backend", "label": "get_database" },
+    { "id": "dfaf", "type": "backend", "label": "get_datafeed" },
+    { "id": "drv", "type": "external", "label": "外部驱动" }
+  ],
+  "messages": [
+    { "id": "m1", "from": "eng", "to": "log", "y": 160, "label": "初始化日志" },
+    { "id": "m2", "from": "eng", "to": "dbf", "y": 220, "label": "首次调用", "variant": "emphasis" },
+    { "id": "m3", "from": "dbf", "to": "drv", "y": 275, "label": "import+实例化" },
+    { "id": "m4", "from": "drv", "to": "dbf", "y": 325, "label": "驱动实例", "variant": "return" },
+    { "id": "m5", "from": "dbf", "to": "eng", "y": 380, "label": "返回单例", "variant": "return" },
+    { "id": "m6", "from": "eng", "to": "dfaf", "y": 445, "label": "首次调用" },
+    { "id": "m7", "from": "dfaf", "to": "eng", "y": 500, "label": "返回单例", "variant": "return" }
+  ]
+}

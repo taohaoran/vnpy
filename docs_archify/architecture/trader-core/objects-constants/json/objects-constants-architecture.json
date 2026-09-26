@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "数据结构与枚举体系架构图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN"
+  },
+  "components": [
+    { "id": "basedata", "type": "backend", "label": "BaseData", "pos": [60, 200], "size": [140, 60], "tag": "dataclass 基类" },
+    { "id": "enums", "type": "database", "label": "枚举体系", "pos": [360, 60], "size": [170, 60] },
+    { "id": "mkt", "type": "backend", "label": "行情数据", "pos": [360, 180], "size": [170, 60] },
+    { "id": "trading", "type": "backend", "label": "交易数据", "pos": [360, 300], "size": [170, 60] },
+    { "id": "ref", "type": "backend", "label": "合约与日志", "pos": [360, 420], "size": [170, 60] },
+    { "id": "reqs", "type": "external", "label": "请求类", "pos": [640, 240], "size": [160, 60] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "继承 BaseData 的数据对象", "wraps": ["mkt", "trading", "ref"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "basedata", "to": "mkt", "label": "继承", "variant": "dashed" },
+    { "id": "c2", "from": "basedata", "to": "trading", "label": "继承", "variant": "dashed" },
+    { "id": "c3", "from": "basedata", "to": "ref", "label": "继承", "variant": "dashed" },
+    { "id": "c5", "from": "trading", "to": "reqs", "label": "create_*_data", "variant": "default" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "核心机制", "items": [
+      "dataclass 统一数据载体",
+      "__post_init__ 派生 vt_*id",
+      "枚举做类型安全约束",
+      "请求类可生成数据对象"
+    ] }
+  ]
+}

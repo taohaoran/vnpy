@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "K线图表组件架构图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN"
+  },
+  "components": [
+    { "id": "ui", "type": "frontend", "label": "ChartWidget", "pos": [60, 80], "size": [160, 60], "tag": "顶层控件" },
+    { "id": "cursor", "type": "frontend", "label": "ChartCursor", "pos": [60, 240], "size": [160, 60], "tag": "十字光标" },
+    { "id": "manager", "type": "database", "label": "BarManager", "pos": [400, 80], "size": [160, 60], "tag": "数据+缓存" },
+    { "id": "axis", "type": "backend", "label": "DatetimeAxis", "pos": [400, 240], "size": [160, 60], "tag": "时间刻度" },
+    { "id": "candle", "type": "backend", "label": "CandleItem", "pos": [740, 80], "size": [160, 60], "tag": "蜡烛图" },
+    { "id": "vol", "type": "backend", "label": "VolumeItem", "pos": [740, 240], "size": [160, 60], "tag": "成交量" },
+    { "id": "pg", "type": "external", "label": "pyqtgraph/PySide6", "pos": [400, 380], "size": [160, 56], "tag": "不在本仓库" }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "vnpy.chart 组件", "wraps": ["ui", "cursor", "manager", "axis", "candle", "vol"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "ui", "to": "manager", "label": "update_bar", "variant": "emphasis" },
+    { "id": "c2", "from": "ui", "to": "cursor", "variant": "default" },
+    { "id": "c3", "from": "ui", "to": "axis", "label": "时间轴", "variant": "default" },
+    { "id": "c4", "from": "candle", "to": "manager", "label": "取bar/范围", "variant": "default" },
+    { "id": "c5", "from": "vol", "to": "manager", "label": "取量范围", "variant": "default" },
+    { "id": "c6", "from": "axis", "to": "manager", "label": "转datetime", "variant": "dashed" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "要点", "items": [
+      "ChartItem 抽象基类定义绘制契约",
+      "BarManager 双向索引+范围缓存",
+      "可视区 QPicture 增量重绘"
+    ]}
+  ]
+}

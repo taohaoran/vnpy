@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "vnpy 系统架构图",
+    "quality_profile": "standard",
+    "locale": "zh-CN",
+    "viewBox": [1150, 760]
+  },
+  "components": [
+    { "id": "developer", "type": "external", "label": "策略开发者", "pos": [130, 20], "size": [130, 50] },
+    { "id": "mainwindow", "type": "frontend", "label": "MainWindow桌面端", "pos": [120, 120], "size": [150, 55], "tag": "PySide6 GUI" },
+    { "id": "alphalab", "type": "backend", "label": "AlphaLab研究端", "pos": [405, 120], "size": [150, 55], "tag": "因子投研" },
+    { "id": "chart", "type": "frontend", "label": "K线图表组件", "pos": [705, 120], "size": [150, 55], "tag": "pyqtgraph" },
+    { "id": "mainengine", "type": "backend", "label": "MainEngine主引擎", "pos": [120, 260], "size": [150, 55], "tag": "引擎编排" },
+    { "id": "omsengine", "type": "backend", "label": "OmsEngine订单管理", "pos": [400, 260], "size": [160, 55], "tag": "委托/持仓/账户" },
+    { "id": "eventengine", "type": "messagebus", "label": "EventEngine事件总线", "pos": [700, 260], "size": [160, 55], "tag": "发布订阅" },
+    { "id": "database", "type": "database", "label": "BaseDatabase数据库接口", "pos": [110, 410], "size": [170, 55], "tag": "持久化抽象" },
+    { "id": "gateway", "type": "backend", "label": "BaseGateway交易网关", "pos": [400, 410], "size": [160, 55], "tag": "抽象接口" },
+    { "id": "datafeed", "type": "cloud", "label": "BaseDatafeed数据服务", "pos": [700, 410], "size": [160, 55], "tag": "历史数据抽象" },
+    { "id": "rpc", "type": "backend", "label": "RPC远程通信", "pos": [900, 410], "size": [140, 55], "tag": "pyzmq" },
+    { "id": "dbproduct", "type": "external", "label": "数据库产品", "pos": [130, 560], "size": [130, 50] },
+    { "id": "exchange", "type": "external", "label": "交易所", "pos": [415, 560], "size": [130, 50] },
+    { "id": "datavendor", "type": "external", "label": "数据供应商", "pos": [715, 560], "size": [130, 50] },
+    { "id": "wechat", "type": "external", "label": "微信推送", "pos": [910, 560], "size": [120, 50] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "应用与展示层", "wraps": ["mainwindow", "alphalab", "chart"] },
+    { "kind": "region", "label": "核心引擎层", "wraps": ["mainengine", "omsengine", "eventengine"] },
+    { "kind": "region", "label": "服务接口层", "wraps": ["database", "gateway", "datafeed", "rpc"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "developer", "to": "mainwindow", "label": "操作GUI", "variant": "emphasis", "labelDy": 24 },
+    { "id": "c2", "from": "mainwindow", "to": "mainengine", "label": "调用API", "variant": "emphasis", "labelDy": 24 },
+    { "id": "c3", "from": "mainengine", "to": "omsengine", "label": "委托转发", "variant": "emphasis", "labelDy": -20 },
+    { "id": "c4", "from": "omsengine", "to": "gateway", "label": "报单", "variant": "emphasis", "labelDy": 24 },
+    { "id": "c5", "from": "gateway", "to": "exchange", "label": "网络通信", "variant": "emphasis", "labelDy": 24 },
+    { "id": "c6", "from": "eventengine", "to": "chart", "label": "行情推送", "variant": "dashed", "labelAt": [780, 210] },
+    { "id": "c7", "from": "database", "to": "dbproduct", "label": "持久化", "variant": "default", "labelDy": 24 },
+    { "id": "c8", "from": "datafeed", "to": "datavendor", "label": "历史数据", "variant": "default", "labelDy": 24 }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "核心范式", "items": ["事件驱动 + 引擎插件化", "三大抽象接口 Gateway/Database/Datafeed", "纯 Python 实现，无 C++ 绑定层"] },
+    { "dot": "amber", "title": "未连线的关键关系", "items": ["MainEngine 注册事件到 EventEngine", "EventEngine 回调更新 MainWindow", "OmsEngine 持仓经 BaseDatabase 落库", "RPC 远程调用 MainEngine", "AlphaLab 加载策略至 MainEngine"] }
+  ]
+}

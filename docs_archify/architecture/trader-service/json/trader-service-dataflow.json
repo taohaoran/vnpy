@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": { "title": "trader-service 数据服务管道", "quality_profile": "showcase", "locale": "zh-CN", "viewBox": [1150, 380] },
+  "stages": [
+    { "label": "历史数据" },
+    { "label": "落库" },
+    { "label": "回测" },
+    { "label": "参数寻优" },
+    { "label": "通知" }
+  ],
+  "nodes": [
+    { "id": "df", "type": "external", "label": "datafeed", "stage": 0, "row": 0 },
+    { "id": "db", "type": "backend", "label": "database", "stage": 1, "row": 0 },
+    { "id": "bt", "type": "external", "label": "策略回测", "stage": 2, "row": 0 },
+    { "id": "opt", "type": "backend", "label": "optimizer", "stage": 3, "row": 0 },
+    { "id": "wx", "type": "external", "label": "微信通知", "stage": 4, "row": 0 }
+  ],
+  "flows": [
+    { "from": "df", "to": "db", "label": "拉历史", "variant": "default", "route": "straight" },
+    { "from": "db", "to": "bt", "label": "加载bar", "variant": "default", "route": "straight" },
+    { "from": "bt", "to": "opt", "label": "评估组合", "variant": "emphasis", "route": "straight" },
+    { "from": "opt", "to": "wx", "label": "结果推送", "variant": "emphasis", "route": "straight" }
+  ]
+}

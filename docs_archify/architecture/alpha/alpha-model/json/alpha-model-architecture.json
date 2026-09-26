@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "预测模型架构图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN"
+  },
+  "components": [
+    { "id": "base", "type": "backend", "label": "AlphaModel抽象基类", "pos": [380, 180], "size": [170, 60], "tag": "fit/predict契约" },
+    { "id": "lasso", "type": "backend", "label": "LassoModel", "pos": [60, 80], "size": [150, 56], "tag": "sklearn线性" },
+    { "id": "lgb", "type": "backend", "label": "LgbModel", "pos": [60, 200], "size": [150, 56], "tag": "LightGBM树" },
+    { "id": "mlp", "type": "backend", "label": "MlpModel", "pos": [60, 320], "size": [150, 56], "tag": "PyTorch网络" },
+    { "id": "ds", "type": "database", "label": "AlphaDataset", "pos": [720, 120], "size": [150, 56], "tag": "取X/y" },
+    { "id": "np", "type": "external", "label": "sklearn/lgb/torch", "pos": [720, 280], "size": [150, 56], "tag": "不在本仓库" }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "vnpy.alpha.model", "wraps": ["base", "lasso", "lgb", "mlp"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "lasso", "to": "base", "label": "实现", "variant": "default" },
+    { "id": "c2", "from": "lgb", "to": "base", "label": "实现", "variant": "default" },
+    { "id": "c3", "from": "mlp", "to": "base", "label": "实现", "variant": "default" },
+    { "id": "c4", "from": "base", "to": "ds", "label": "fetch_learn/infer", "variant": "emphasis" },
+    { "id": "c5", "from": "lasso", "to": "np", "variant": "default" },
+    { "id": "c6", "from": "lgb", "to": "np", "variant": "default" },
+    { "id": "c7", "from": "mlp", "to": "np", "variant": "default" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "要点", "items": [
+      "统一fit/predict契约",
+      "三后端实现矩阵",
+      "从dataset取训练矩阵"
+    ]}
+  ]
+}

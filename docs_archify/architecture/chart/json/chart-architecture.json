@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "图表域架构图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN"
+  },
+  "components": [
+    { "id": "ui", "type": "external", "label": "trader.ui 主窗口", "pos": [60, 100], "size": [160, 60], "tag": "调用方" },
+    { "id": "widget", "type": "frontend", "label": "ChartWidget", "pos": [60, 260], "size": [160, 60], "tag": "顶层控件" },
+    { "id": "manager", "type": "database", "label": "BarManager", "pos": [400, 100], "size": [160, 60], "tag": "数据管理" },
+    { "id": "items", "type": "backend", "label": "ChartItem 族", "pos": [400, 260], "size": [160, 60], "tag": "蜡烛/量/指标" },
+    { "id": "axis", "type": "backend", "label": "DatetimeAxis", "pos": [400, 400], "size": [160, 60], "tag": "时间轴" },
+    { "id": "pg", "type": "external", "label": "pyqtgraph/PySide6", "pos": [740, 260], "size": [160, 60], "tag": "渲染框架" },
+    { "id": "bars", "type": "external", "label": "BarData 对象", "pos": [740, 100], "size": [160, 60], "tag": "trader.object" }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "vnpy.chart", "wraps": ["widget", "manager", "items", "axis"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "ui", "to": "widget", "variant": "emphasis" },
+    { "id": "c2", "from": "widget", "to": "manager", "label": "数据更新", "variant": "default" },
+    { "id": "c3", "from": "widget", "to": "items", "variant": "default" },
+    { "id": "c4", "from": "widget", "to": "axis", "variant": "default" },
+    { "id": "c5", "from": "items", "to": "manager", "label": "取数据", "variant": "emphasis" },
+    { "id": "c6", "from": "items", "to": "pg", "label": "绘制", "variant": "default" },
+    { "id": "c7", "from": "manager", "to": "bars", "label": "消费", "variant": "dashed" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "域职责", "items": [
+      "K线/成交量/指标子图渲染",
+      "缩放平移与十字光标",
+      "基于pyqtgraph的GUI组件"
+    ]}
+  ]
+}

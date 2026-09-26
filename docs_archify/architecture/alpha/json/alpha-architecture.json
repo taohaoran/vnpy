@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "alpha 域架构图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN"
+  },
+  "components": [
+    { "id": "lab", "type": "database", "label": "AlphaLab仓储", "pos": [60, 280], "size": [150, 60] },
+    { "id": "ds", "type": "backend", "label": "AlphaDataset", "pos": [330, 100], "size": [150, 60] },
+    { "id": "model", "type": "backend", "label": "AlphaModel", "pos": [600, 100], "size": [150, 60] },
+    { "id": "strat", "type": "backend", "label": "AlphaStrategy", "pos": [600, 280], "size": [150, 60] },
+    { "id": "bt", "type": "backend", "label": "BacktestingEngine", "pos": [600, 440], "size": [150, 60] },
+    { "id": "pl", "type": "external", "label": "polars/sklearn/lgb/torch", "pos": [300, 460], "size": [180, 56] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "vnpy.alpha", "wraps": ["lab", "ds", "model", "strat", "bt"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "lab", "to": "ds", "label": "K线df", "variant": "emphasis" },
+    { "id": "c2", "from": "ds", "to": "model", "label": "X/y矩阵", "variant": "emphasis" },
+    { "id": "c3", "from": "model", "to": "strat", "label": "signal_df", "variant": "emphasis", "labelDy": 24 },
+    { "id": "c4", "from": "strat", "to": "bt", "label": "on_bars", "variant": "default", "labelDy": 24 }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "研究闭环", "items": [
+      "数据→因子→模型→信号→回测",
+      "三套抽象基类+仓储门面",
+      "第三方计算库在外部"
+    ]}
+  ]
+}

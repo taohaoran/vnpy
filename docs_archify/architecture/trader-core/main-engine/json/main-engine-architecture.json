@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "MainEngine 组件架构图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN"
+  },
+  "components": [
+    { "id": "user", "type": "external", "label": "策略/上层应用", "pos": [40, 60], "size": [130, 56] },
+    { "id": "mainengine", "type": "backend", "label": "MainEngine", "pos": [300, 50], "size": [160, 70], "tag": "核心容器" },
+    { "id": "eventengine", "type": "messagebus", "label": "EventEngine", "pos": [600, 60], "size": [150, 56] },
+    { "id": "gateways", "type": "external", "label": "网关集合", "pos": [40, 320], "size": [140, 56] },
+    { "id": "omsengine", "type": "backend", "label": "OmsEngine", "pos": [240, 320], "size": [140, 56] },
+    { "id": "logengine", "type": "backend", "label": "LogEngine", "pos": [430, 320], "size": [140, 56] },
+    { "id": "apps", "type": "external", "label": "插件应用集合", "pos": [620, 320], "size": [140, 56] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "内置功能引擎", "wraps": ["omsengine", "logengine"] },
+    { "kind": "region", "label": "外部接入层", "wraps": ["gateways", "apps"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "user", "to": "mainengine", "label": "调用交易接口", "variant": "emphasis" },
+    { "id": "c2", "from": "mainengine", "to": "eventengine", "label": "持有启动", "variant": "default" },
+    { "id": "c3", "from": "mainengine", "to": "gateways", "label": "add_gateway", "variant": "default", "fromSide": "left" },
+    { "id": "c4", "from": "mainengine", "to": "omsengine", "label": "add_engine", "variant": "default", "fromSide": "bottom" },
+    { "id": "c5", "from": "mainengine", "to": "logengine", "label": "add_engine", "variant": "dashed", "fromSide": "bottom" },
+    { "id": "c6", "from": "mainengine", "to": "apps", "label": "add_app", "variant": "default", "fromSide": "right" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "核心机制", "items": [
+      "MainEngine 是平台核心容器",
+      "统一管理引擎/网关/应用注册",
+      "委托 OmsEngine 暴露查询接口",
+      "事件经 EventEngine 异步分发"
+    ] }
+  ]
+}

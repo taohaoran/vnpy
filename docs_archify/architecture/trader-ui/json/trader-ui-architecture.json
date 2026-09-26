@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": { "title": "trader-ui 域架构图", "quality_profile": "showcase", "locale": "zh-CN" },
+  "components": [
+    { "id": "entry", "type": "external", "label": "veighna_trader", "pos": [60, 230], "size": [140, 60] },
+    { "id": "qapp", "type": "backend", "label": "create_qapp", "pos": [330, 80], "size": [140, 60], "tag": "主题/异常钩子" },
+    { "id": "mainwin", "type": "backend", "label": "MainWindow", "pos": [330, 230], "size": [140, 60], "tag": "主窗口装配" },
+    { "id": "worker", "type": "backend", "label": "WechatWorker", "pos": [600, 80], "size": [140, 60], "tag": "QThread轮询" },
+    { "id": "monitors", "type": "backend", "label": "Monitor监控表族", "pos": [600, 230], "size": [160, 60] },
+    { "id": "eng", "type": "external", "label": "MainEngine/EventEngine", "pos": [860, 230], "size": [170, 60] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "trader-ui 域（本仓库源码内）", "wraps": ["qapp", "mainwin", "worker", "monitors"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "entry", "to": "qapp", "label": "建QApp", "variant": "emphasis" },
+    { "id": "c2", "from": "qapp", "to": "mainwin", "label": "装配", "variant": "default", "labelDy": 40 },
+    { "id": "c3", "from": "mainwin", "to": "monitors", "label": "create_dock", "variant": "default" },
+    { "id": "c4", "from": "monitors", "to": "eng", "label": "事件/下单", "variant": "emphasis" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "域定位", "items": ["PySide6桌面GUI", "Qt Signal跨线程桥"] }
+  ]
+}

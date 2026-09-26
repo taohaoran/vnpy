@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "AlphaModel 训练生命周期",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [1030, 600]
+  },
+  "lanes": [
+    { "id": "main", "label": "训练主流程" },
+    { "id": "exit", "label": "退出分支" }
+  ],
+  "states": [
+    { "id": "init", "type": "start", "label": "未训练", "lane": "main", "col": 0 },
+    { "id": "fit", "type": "active", "label": "训练中", "lane": "main", "col": 1 },
+    { "id": "ready", "type": "active", "label": "可预测", "lane": "main", "col": 2 },
+    { "id": "done", "type": "success", "label": "训练完成", "lane": "main", "col": 3 },
+    { "id": "early", "type": "failure", "label": "早停", "lane": "exit", "col": 0, "yOffset": 90 }
+  ],
+  "transitions": [
+    { "id": "t1", "from": "init", "to": "fit" },
+    { "id": "t2", "from": "fit", "to": "ready" },
+    { "id": "t3", "from": "ready", "to": "done" },
+    { "id": "t4", "from": "fit", "to": "early", "variant": "security" },
+    { "id": "t5", "from": "early", "to": "ready", "variant": "default" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "训练流程", "items": [
+      "未训练→训练中→可预测",
+      "早停回退best权重",
+      "完成后可predict"
+    ]}
+  ]
+}

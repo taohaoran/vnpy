@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "K线合成数据流",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [
+      1150,
+      380
+    ]
+  },
+  "stages": [
+    {
+      "label": "行情输入"
+    },
+    {
+      "label": "分钟合成"
+    },
+    {
+      "label": "多周期聚合"
+    },
+    {
+      "label": "序列容器"
+    },
+    {
+      "label": "指标输出"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "tick",
+      "type": "external",
+      "label": "Tick 推送",
+      "stage": 0,
+      "row": 0
+    },
+    {
+      "id": "min1",
+      "type": "backend",
+      "label": "1分钟K线",
+      "stage": 1,
+      "row": 0
+    },
+    {
+      "id": "agg",
+      "type": "backend",
+      "label": "多周期窗口",
+      "stage": 2,
+      "row": 0
+    },
+    {
+      "id": "amgr",
+      "type": "backend",
+      "label": "ArrayManager",
+      "stage": 3,
+      "row": 0
+    },
+    {
+      "id": "ind",
+      "type": "backend",
+      "label": "技术指标",
+      "stage": 4,
+      "row": 0
+    }
+  ],
+  "flows": [
+    {
+      "from": "tick",
+      "to": "min1",
+      "label": "update_tick",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "from": "min1",
+      "to": "agg",
+      "label": "窗口聚合",
+      "variant": "default",
+      "route": "straight"
+    },
+    {
+      "from": "agg",
+      "to": "amgr",
+      "label": "Bar喂入",
+      "variant": "default",
+      "route": "straight"
+    },
+    {
+      "from": "amgr",
+      "to": "ind",
+      "label": "talib计算",
+      "variant": "emphasis",
+      "route": "straight"
+    }
+  ]
+}

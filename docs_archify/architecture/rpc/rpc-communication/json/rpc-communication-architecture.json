@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "RPC 通信架构图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN"
+  },
+  "components": [
+    { "id": "biz", "type": "frontend", "label": "业务调用方", "pos": [60, 120], "size": [150, 64] },
+    { "id": "client", "type": "frontend", "label": "RpcClient", "pos": [60, 260], "size": [150, 64], "tag": "远程代理" },
+    { "id": "req", "type": "messagebus", "label": "REQ/REP 通道", "pos": [430, 200], "size": [160, 56], "tag": "同步请求应答" },
+    { "id": "sub", "type": "messagebus", "label": "SUB/PUB 通道", "pos": [430, 360], "size": [160, 56], "tag": "异步发布订阅" },
+    { "id": "server", "type": "backend", "label": "RpcServer", "pos": [760, 200], "size": [160, 64], "tag": "函数分派" },
+    { "id": "registry", "type": "database", "label": "函数注册表", "pos": [760, 360], "size": [160, 64], "tag": "name→func" }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "客户端进程", "wraps": ["biz", "client"] },
+    { "kind": "region", "label": "服务端进程", "wraps": ["server", "registry"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "biz", "to": "client", "variant": "emphasis" },
+    { "id": "c2", "from": "client", "to": "req", "label": "send_pyobj", "variant": "default" },
+    { "id": "c3", "from": "req", "to": "server", "label": "请求应答", "variant": "emphasis" },
+    { "id": "c4", "from": "server", "to": "registry", "variant": "default" },
+    { "id": "c5", "from": "server", "to": "sub", "label": "publish 推送", "variant": "dashed" },
+    { "id": "c6", "from": "sub", "to": "client", "label": "回调 callback", "variant": "dashed" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "要点", "items": [
+      "REQ/REP 同步：锁内收发一次",
+      "PUB/SUB 异步：心跳+业务推送",
+      "函数注册表按名字路由调用"
+    ]}
+  ]
+}

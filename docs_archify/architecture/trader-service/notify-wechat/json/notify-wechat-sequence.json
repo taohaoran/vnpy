@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "微信扫码绑定时序",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [
+      1080,
+      720
+    ]
+  },
+  "participants": [
+    {
+      "id": "ui",
+      "type": "frontend",
+      "label": "UI后台线程"
+    },
+    {
+      "id": "qr",
+      "type": "backend",
+      "label": "取二维码"
+    },
+    {
+      "id": "wait",
+      "type": "backend",
+      "label": "等扫码"
+    },
+    {
+      "id": "ilink",
+      "type": "external",
+      "label": "iLink网关"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m1",
+      "from": "ui",
+      "to": "qr",
+      "y": 160,
+      "label": "请求二维码",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m2",
+      "from": "qr",
+      "to": "ilink",
+      "y": 215,
+      "label": "GET get_bot_qrcode"
+    },
+    {
+      "id": "m3",
+      "from": "ilink",
+      "to": "qr",
+      "y": 265,
+      "label": "二维码+链接",
+      "variant": "return"
+    },
+    {
+      "id": "m4",
+      "from": "qr",
+      "to": "ui",
+      "y": 315,
+      "label": "返回二维码",
+      "variant": "return"
+    },
+    {
+      "id": "m5",
+      "from": "ui",
+      "to": "wait",
+      "y": 375,
+      "label": "轮询扫码状态"
+    },
+    {
+      "id": "m6",
+      "from": "wait",
+      "to": "ilink",
+      "y": 425,
+      "label": "GET get_qrcode_status"
+    },
+    {
+      "id": "m7",
+      "from": "ilink",
+      "to": "wait",
+      "y": 475,
+      "label": "confirmed+凭据",
+      "variant": "return"
+    },
+    {
+      "id": "m8",
+      "from": "wait",
+      "to": "ui",
+      "y": 535,
+      "label": "返回Credentials",
+      "variant": "return"
+    }
+  ]
+}

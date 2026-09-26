@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "trader-core 端到端事件数据流",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [1180, 380]
+  },
+  "stages": [
+    { "label": "行情来源" },
+    { "label": "事件队列" },
+    { "label": "事件分发" },
+    { "label": "数据缓存" },
+    { "label": "策略消费" }
+  ],
+  "nodes": [
+    { "id": "gw", "type": "external", "label": "网关 on_xxx", "stage": 0, "row": 0 },
+    { "id": "queue", "type": "messagebus", "label": "Queue", "stage": 1, "row": 0 },
+    { "id": "dispatch", "type": "backend", "label": "分发线程", "stage": 2, "row": 0 },
+    { "id": "oms", "type": "database", "label": "OmsEngine 表", "stage": 3, "row": 0 },
+    { "id": "strategy", "type": "external", "label": "策略 handler", "stage": 4, "row": 0 }
+  ],
+  "flows": [
+    { "from": "gw", "to": "queue", "label": "put 事件", "variant": "emphasis", "route": "straight" },
+    { "from": "queue", "to": "dispatch", "label": "get", "variant": "default", "route": "straight" },
+    { "from": "dispatch", "to": "oms", "label": "process_xxx", "variant": "default", "route": "straight" },
+    { "from": "dispatch", "to": "strategy", "label": "回调", "variant": "dashed", "route": "bottom-channel" }
+  ]
+}

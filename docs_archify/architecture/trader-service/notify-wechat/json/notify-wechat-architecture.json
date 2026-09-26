@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": { "title": "notify-wechat 组件架构图", "quality_profile": "showcase", "locale": "zh-CN" },
+  "components": [
+    { "id": "caller", "type": "frontend", "label": "Engine/Worker调用方", "pos": [60, 110], "size": [160, 60] },
+    { "id": "mod", "type": "backend", "label": "wechat.py 函数集", "pos": [330, 110], "size": [150, 60], "tag": "iLink协议封装" },
+    { "id": "creds", "type": "backend", "label": "Credentials 凭据", "pos": [330, 300], "size": [150, 60] },
+    { "id": "reqs", "type": "external", "label": "requests 库", "pos": [600, 110], "size": [140, 60] },
+    { "id": "ilink", "type": "external", "label": "iLink 微信网关", "pos": [830, 110], "size": [150, 60] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "vnpy/trader（本仓库源码内）", "wraps": ["mod", "creds"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "caller", "to": "mod", "label": "send_text/poll", "variant": "emphasis" },
+    { "id": "c2", "from": "creds", "to": "mod", "label": "携带token", "variant": "dashed" },
+    { "id": "c3", "from": "mod", "to": "reqs", "label": "HTTP调用", "variant": "default" },
+    { "id": "c4", "from": "reqs", "to": "ilink", "label": "HTTPS", "variant": "emphasis" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "要点", "items": ["iLink协议封装为简单Python函数", "-14会话码映射SessionExpired"] }
+  ]
+}

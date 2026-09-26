@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "网关抽象与平仓换算架构图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN"
+  },
+  "components": [
+    { "id": "gw", "type": "external", "label": "BaseGateway 抽象", "pos": [60, 180], "size": [160, 80], "tag": "交易网关接口" },
+    { "id": "cb", "type": "backend", "label": "on_xxx 回调", "pos": [360, 60], "size": [150, 56] },
+    { "id": "api", "type": "backend", "label": "connect/send_order", "pos": [360, 180], "size": [150, 56] },
+    { "id": "conv", "type": "backend", "label": "OffsetConverter", "pos": [360, 300], "size": [150, 56] },
+    { "id": "holding", "type": "database", "label": "PositionHolding", "pos": [640, 300], "size": [150, 56] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "vnpy/trader/gateway.py", "wraps": ["cb", "api"] },
+    { "kind": "region", "label": "vnpy/trader/converter.py", "wraps": ["conv", "holding"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "gw", "to": "cb", "label": "推送事件", "variant": "default" },
+    { "id": "c2", "from": "gw", "to": "api", "label": "实现接口", "variant": "emphasis" },
+    { "id": "c3", "from": "conv", "to": "holding", "label": "按 vt_symbol 持有", "variant": "default" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "核心机制", "items": [
+      "网关 on_xxx 双发事件(类型+按合约)",
+      "OffsetConverter 按网关隔离",
+      "PositionHolding 跟踪今昨仓",
+      "SHFE/INE 特殊平今平昨"
+    ] }
+  ]
+}

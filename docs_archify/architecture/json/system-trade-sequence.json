@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "vnpy 委托交易全流程时序图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [1080, 860]
+  },
+  "participants": [
+    { "id": "dev", "type": "external", "label": "策略开发者" },
+    { "id": "ui", "type": "frontend", "label": "MainWindow" },
+    { "id": "me", "type": "backend", "label": "MainEngine" },
+    { "id": "oms", "type": "backend", "label": "OmsEngine" },
+    { "id": "gw", "type": "backend", "label": "BaseGateway" },
+    { "id": "ex", "type": "external", "label": "交易所" },
+    { "id": "ev", "type": "messagebus", "label": "EventEngine" }
+  ],
+  "messages": [
+    { "id": "m1", "from": "dev", "to": "ui", "y": 160, "label": "提交委托", "variant": "emphasis" },
+    { "id": "m2", "from": "ui", "to": "me", "y": 210, "label": "send_order()", "variant": "emphasis" },
+    { "id": "m3", "from": "me", "to": "oms", "y": 260, "label": "send_order()", "variant": "emphasis" },
+    { "id": "m4", "from": "oms", "to": "gw", "y": 310, "label": "send_order()", "variant": "emphasis" },
+    { "id": "m5", "from": "gw", "to": "ex", "y": 360, "label": "报单请求", "variant": "emphasis" },
+    { "id": "m6", "from": "ex", "to": "gw", "y": 410, "label": "委托回报", "variant": "return" },
+    { "id": "m7", "from": "gw", "to": "oms", "y": 460, "label": "on_order()", "variant": "default" },
+    { "id": "m8", "from": "oms", "to": "ev", "y": 510, "label": "put(EVENT_ORDER)", "variant": "default" },
+    { "id": "m9", "from": "ev", "to": "ui", "y": 560, "label": "回调更新委托", "variant": "return" },
+    { "id": "m10", "from": "ex", "to": "gw", "y": 620, "label": "成交回报", "variant": "return" },
+    { "id": "m11", "from": "gw", "to": "oms", "y": 670, "label": "on_trade()", "variant": "default" },
+    { "id": "m12", "from": "oms", "to": "ev", "y": 720, "label": "put(EVENT_TRADE)", "variant": "default" },
+    { "id": "m13", "from": "ev", "to": "ui", "y": 770, "label": "更新持仓成交", "variant": "return" }
+  ]
+}

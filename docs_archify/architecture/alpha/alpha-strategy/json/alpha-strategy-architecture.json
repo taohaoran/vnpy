@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "策略回测架构图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN"
+  },
+  "components": [
+    { "id": "engine", "type": "backend", "label": "BacktestingEngine", "pos": [380, 180], "size": [170, 60], "tag": "回测引擎" },
+    { "id": "strategy", "type": "backend", "label": "AlphaStrategy", "pos": [60, 100], "size": [150, 56], "tag": "策略模板" },
+    { "id": "demo", "type": "backend", "label": "EquityDemo", "pos": [60, 220], "size": [150, 56], "tag": "示例选股" },
+    { "id": "lab", "type": "database", "label": "AlphaLab", "pos": [720, 80], "size": [150, 56], "tag": "历史/合约" },
+    { "id": "signal", "type": "database", "label": "信号df", "pos": [720, 200], "size": [150, 56], "tag": "模型预测" },
+    { "id": "result", "type": "database", "label": "日盈亏结果", "pos": [720, 320], "size": [150, 56], "tag": "绩效统计" }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "vnpy.alpha.strategy", "wraps": ["engine", "strategy", "demo"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "demo", "to": "strategy", "label": "继承", "variant": "default" },
+    { "id": "c2", "from": "strategy", "to": "engine", "label": "send_order", "variant": "emphasis" },
+    { "id": "c3", "from": "engine", "to": "strategy", "label": "on_bars回推", "variant": "dashed" },
+    { "id": "c4", "from": "engine", "to": "lab", "label": "load_data", "variant": "default" },
+    { "id": "c5", "from": "engine", "to": "signal", "label": "get_signal", "variant": "default" },
+    { "id": "c6", "from": "engine", "to": "result", "label": "calculate_pnl", "variant": "emphasis" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "要点", "items": [
+      "策略回调模板",
+      "引擎撮合+逐日盯市",
+      "目标仓位调仓"
+    ]}
+  ]
+}

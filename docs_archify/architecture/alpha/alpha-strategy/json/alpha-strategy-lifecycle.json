@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "回测引擎生命周期",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [1030, 600]
+  },
+  "lanes": [
+    { "id": "main", "label": "回测主流程" }
+  ],
+  "states": [
+    { "id": "idle", "type": "start", "label": "配置完成", "lane": "main", "col": 0 },
+    { "id": "load", "type": "active", "label": "加载初始化", "lane": "main", "col": 1 },
+    { "id": "loop", "type": "active", "label": "逐根回放", "lane": "main", "col": 2 },
+    { "id": "stat", "type": "active", "label": "盈亏统计", "lane": "main", "col": 3 },
+    { "id": "done", "type": "success", "label": "回测结束", "lane": "main", "col": 4 }
+  ],
+  "transitions": [
+    { "id": "t1", "from": "idle", "to": "load" },
+    { "id": "t2", "from": "load", "to": "loop" },
+    { "id": "t3", "from": "loop", "to": "stat" },
+    { "id": "t4", "from": "stat", "to": "done" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "回测流程", "items": [
+      "配置→加载初始化→回放",
+      "逐根bar撮合+on_bars",
+      "逐日盯市统计"
+    ]}
+  ]
+}

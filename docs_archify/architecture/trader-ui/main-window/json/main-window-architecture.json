@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "main-window 组件架构图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN"
+  },
+  "components": [
+    {
+      "id": "entry",
+      "type": "external",
+      "label": "veighna_trader 入口",
+      "pos": [
+        60,
+        110
+      ],
+      "size": [
+        160,
+        60
+      ]
+    },
+    {
+      "id": "qapp",
+      "type": "backend",
+      "label": "create_qapp",
+      "pos": [
+        330,
+        110
+      ],
+      "size": [
+        140,
+        60
+      ],
+      "tag": "主题/异常钩子"
+    },
+    {
+      "id": "mainwin",
+      "type": "backend",
+      "label": "MainWindow",
+      "pos": [
+        330,
+        300
+      ],
+      "size": [
+        140,
+        60
+      ],
+      "tag": "菜单/工具栏/停靠"
+    },
+    {
+      "id": "eventeng",
+      "type": "external",
+      "label": "EventEngine",
+      "pos": [
+        600,
+        110
+      ],
+      "size": [
+        140,
+        60
+      ]
+    },
+    {
+      "id": "docks",
+      "type": "backend",
+      "label": "Monitor/交易面板",
+      "pos": [
+        600,
+        300
+      ],
+      "size": [
+        160,
+        60
+      ],
+      "tag": "8个监控表"
+    },
+    {
+      "id": "maineng",
+      "type": "external",
+      "label": "MainEngine",
+      "pos": [
+        870,
+        300
+      ],
+      "size": [
+        140,
+        60
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "vnpy/trader/ui（本仓库源码内）",
+      "wraps": [
+        "qapp",
+        "mainwin",
+        "docks"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "c1",
+      "from": "entry",
+      "to": "qapp",
+      "label": "创建QApp",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c2",
+      "from": "qapp",
+      "to": "mainwin",
+      "label": "装配主窗",
+      "variant": "default",
+      "labelDy": 40
+    },
+    {
+      "id": "c3",
+      "from": "mainwin",
+      "to": "docks",
+      "label": "create_dock",
+      "variant": "default"
+    },
+    {
+      "id": "c4",
+      "from": "eventeng",
+      "to": "docks",
+      "label": "事件订阅",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "c5",
+      "from": "docks",
+      "to": "maineng",
+      "label": "下单/查询",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "要点",
+      "items": [
+        "Qt Signal 桥接事件线程→主线程",
+        "App UI 动态加载"
+      ]
+    }
+  ]
+}

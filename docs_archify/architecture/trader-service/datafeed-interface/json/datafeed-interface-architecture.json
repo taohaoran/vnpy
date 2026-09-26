@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": { "title": "datafeed-interface 组件架构图", "quality_profile": "showcase", "locale": "zh-CN" },
+  "components": [
+    { "id": "caller", "type": "external", "label": "回测/下载调用方", "pos": [60, 110], "size": [150, 60] },
+    { "id": "factory", "type": "backend", "label": "get_datafeed 工厂", "pos": [310, 110], "size": [150, 60], "tag": "懒加载单例" },
+    { "id": "settings", "type": "backend", "label": "SETTINGS 配置", "pos": [310, 300], "size": [150, 60] },
+    { "id": "driver", "type": "external", "label": "vnpy_<name> 驱动", "pos": [580, 110], "size": [150, 60] },
+    { "id": "abc", "type": "backend", "label": "BaseDatafeed 契约", "pos": [580, 300], "size": [150, 60] },
+    { "id": "remote", "type": "external", "label": "远端行情服务", "pos": [830, 110], "size": [140, 60] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "vnpy/trader（本仓库源码内）", "wraps": ["factory", "settings", "abc"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "caller", "to": "factory", "label": "get_datafeed()", "variant": "emphasis" },
+    { "id": "c2", "from": "settings", "to": "factory", "label": "读配置", "variant": "dashed" },
+    { "id": "c3", "from": "factory", "to": "driver", "label": "import_module", "variant": "default" },
+    { "id": "c4", "from": "abc", "to": "driver", "label": "实现契约", "variant": "dashed" },
+    { "id": "c5", "from": "driver", "to": "remote", "label": "历史查询", "variant": "emphasis" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "主路径", "items": ["配置字符串→动态import驱动→实例化→返回BaseDatafeed", "未配置/缺失时回退空实现"] }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "optimizer 组件架构图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN"
+  },
+  "components": [
+    {
+      "id": "caller",
+      "type": "external",
+      "label": "策略回测调用方",
+      "pos": [
+        60,
+        210
+      ],
+      "size": [
+        160,
+        60
+      ]
+    },
+    {
+      "id": "setting",
+      "type": "backend",
+      "label": "OptimizationSetting",
+      "pos": [
+        330,
+        110
+      ],
+      "size": [
+        160,
+        60
+      ],
+      "tag": "参数空间"
+    },
+    {
+      "id": "runner",
+      "type": "backend",
+      "label": "run_bf/run_ga",
+      "pos": [
+        330,
+        300
+      ],
+      "size": [
+        160,
+        60
+      ],
+      "tag": "并行优化入口"
+    },
+    {
+      "id": "pool",
+      "type": "external",
+      "label": "多进程池",
+      "pos": [
+        610,
+        300
+      ],
+      "size": [
+        140,
+        60
+      ]
+    },
+    {
+      "id": "eval",
+      "type": "external",
+      "label": "evaluate_func",
+      "pos": [
+        850,
+        300
+      ],
+      "size": [
+        150,
+        60
+      ]
+    },
+    {
+      "id": "deap",
+      "type": "external",
+      "label": "deap 算法库",
+      "pos": [
+        610,
+        110
+      ],
+      "size": [
+        140,
+        60
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "vnpy/trader（本仓库源码内）",
+      "wraps": [
+        "setting",
+        "runner"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "c1",
+      "from": "caller",
+      "to": "setting",
+      "label": "参数空间",
+      "variant": "default"
+    },
+    {
+      "id": "c2",
+      "from": "caller",
+      "to": "runner",
+      "label": "run优化",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c4",
+      "from": "runner",
+      "to": "pool",
+      "label": "并行分发",
+      "variant": "default"
+    },
+    {
+      "id": "c5",
+      "from": "pool",
+      "to": "eval",
+      "label": "并行评估",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "要点",
+      "items": [
+        "穷举与遗传算法双轨",
+        "spawn多进程+Manager缓存"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": { "title": "trader-ui 启动装配时序", "quality_profile": "showcase", "locale": "zh-CN", "viewBox": [1080, 680] },
+  "participants": [
+    { "id": "entry", "type": "external", "label": "入口脚本" },
+    { "id": "qapp", "type": "backend", "label": "create_qapp" },
+    { "id": "mw", "type": "backend", "label": "MainWindow" },
+    { "id": "mon", "type": "backend", "label": "BaseMonitor" },
+    { "id": "ee", "type": "external", "label": "EventEngine" }
+  ],
+  "messages": [
+    { "id": "m1", "from": "entry", "to": "qapp", "y": 160, "label": "建QApp+异常钩子", "variant": "emphasis" },
+    { "id": "m2", "from": "qapp", "to": "mw", "y": 220, "label": "实例化主窗" },
+    { "id": "m3", "from": "mw", "to": "mon", "y": 280, "label": "create_dock" },
+    { "id": "m4", "from": "mon", "to": "ee", "y": 340, "label": "register(signal.emit)" },
+    { "id": "m5", "from": "ee", "to": "mon", "y": 400, "label": "事件回流", "variant": "return" }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "OmsEngine 数据存储架构图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN"
+  },
+  "components": [
+    { "id": "oms", "type": "backend", "label": "OmsEngine", "pos": [60, 180], "size": [150, 90], "tag": "事件订阅缓存" },
+    { "id": "mkt", "type": "database", "label": "行情与合约表", "pos": [340, 60], "size": [170, 60] },
+    { "id": "trade", "type": "database", "label": "委托成交报价表", "pos": [340, 200], "size": [170, 60] },
+    { "id": "acct", "type": "database", "label": "持仓与账户表", "pos": [340, 340], "size": [170, 60] },
+    { "id": "conv", "type": "backend", "label": "OffsetConverter", "pos": [640, 200], "size": [160, 60] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "vt_key→数据对象 内存字典", "wraps": ["mkt", "trade", "acct"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "oms", "to": "mkt", "label": "Tick/Contract 写入", "variant": "default" },
+    { "id": "c2", "from": "oms", "to": "trade", "label": "Order/Trade/Quote", "variant": "emphasis" },
+    { "id": "c3", "from": "oms", "to": "acct", "label": "Position/Account", "variant": "default" },
+    { "id": "c4", "from": "trade", "to": "conv", "label": "平仓换算回写", "variant": "default" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "核心机制", "items": [
+      "七类数据按 vt_*id 建内存字典",
+      "active_orders/quotes 派生活跃集合",
+      "按 gateway_name 维护 OffsetConverter",
+      "contract 首到即建 converter"
+    ] }
+  ]
+}

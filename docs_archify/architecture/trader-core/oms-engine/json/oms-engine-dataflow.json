@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "OmsEngine 事件入库数据流",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [1180, 400]
+  },
+  "stages": [
+    { "label": "事件来源" },
+    { "label": "异步队列" },
+    { "label": "OmsEngine 处理" },
+    { "label": "内存存储" },
+    { "label": "平仓换算" }
+  ],
+  "nodes": [
+    { "id": "gw", "type": "external", "label": "网关 on_xxx", "stage": 0, "row": 0 },
+    { "id": "eq", "type": "messagebus", "label": "EventEngine 队列", "stage": 1, "row": 0 },
+    { "id": "proc", "type": "backend", "label": "process_xxx_event", "stage": 2, "row": 0 },
+    { "id": "store", "type": "database", "label": "七类内存字典", "stage": 3, "row": 0 },
+    { "id": "conv", "type": "backend", "label": "OffsetConverter", "stage": 4, "row": 0 }
+  ],
+  "flows": [
+    { "from": "gw", "to": "eq", "label": "事件入队", "variant": "emphasis", "route": "straight" },
+    { "from": "eq", "to": "proc", "label": "按类型分发", "variant": "default", "route": "straight" },
+    { "from": "proc", "to": "store", "label": "按 vt_id 覆盖写", "variant": "default", "route": "straight" },
+    { "from": "proc", "to": "conv", "label": "Order/Trade/Position", "variant": "dashed", "route": "bottom-channel" }
+  ]
+}

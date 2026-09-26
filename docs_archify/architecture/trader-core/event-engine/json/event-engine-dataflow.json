@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "EventEngine 事件分发数据流",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [1180, 420]
+  },
+  "stages": [
+    { "label": "事件生产者" },
+    { "label": "事件队列" },
+    { "label": "分发线程" },
+    { "label": "处理器" }
+  ],
+  "nodes": [
+    { "id": "prod", "type": "external", "label": "网关/引擎 put", "stage": 0, "row": 0 },
+    { "id": "timer", "type": "backend", "label": "定时器线程", "stage": 0, "row": 1 },
+    { "id": "queue", "type": "messagebus", "label": "Queue 队列", "stage": 1, "row": 0 },
+    { "id": "worker", "type": "backend", "label": "_process 分发", "stage": 2, "row": 0 },
+    { "id": "typed", "type": "backend", "label": "类型处理器表", "stage": 3, "row": 0 },
+    { "id": "gen", "type": "backend", "label": "通用处理器", "stage": 3, "row": 1 }
+  ],
+  "flows": [
+    { "from": "prod", "to": "queue", "label": "put(event)", "variant": "emphasis", "route": "straight" },
+    { "from": "timer", "to": "queue", "label": "每秒 put 定时器事件", "variant": "dashed", "route": "bottom-channel" },
+    { "from": "queue", "to": "worker", "label": "get(timeout=1)", "variant": "default", "route": "straight" },
+    { "from": "worker", "to": "typed", "label": "按 type 查 handlers", "variant": "default", "route": "straight" },
+    { "from": "worker", "to": "gen", "label": "广播 general", "variant": "dashed", "route": "bottom-channel" }
+  ]
+}

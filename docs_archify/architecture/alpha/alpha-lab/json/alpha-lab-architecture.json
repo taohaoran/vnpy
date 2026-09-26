@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "AlphaLab 架构图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN"
+  },
+  "components": [
+    { "id": "lab", "type": "backend", "label": "AlphaLab", "pos": [380, 180], "size": [160, 60], "tag": "研究仓储门面" },
+    { "id": "bar", "type": "database", "label": "K线parquet", "pos": [60, 80], "size": [150, 56], "tag": "daily/minute" },
+    { "id": "comp", "type": "database", "label": "成分shelve", "pos": [60, 200], "size": [150, 56], "tag": "指数成分" },
+    { "id": "contract", "type": "database", "label": "合约JSON", "pos": [60, 320], "size": [150, 56], "tag": "费率乘数" },
+    { "id": "ds", "type": "database", "label": "数据集pkl", "pos": [720, 80], "size": [150, 56], "tag": "AlphaDataset" },
+    { "id": "model", "type": "database", "label": "模型pkl", "pos": [720, 200], "size": [150, 56], "tag": "AlphaModel" },
+    { "id": "signal", "type": "database", "label": "信号parquet", "pos": [720, 320], "size": [150, 56], "tag": "预测结果" },
+    { "id": "pl", "type": "external", "label": "polars", "pos": [380, 360], "size": [160, 56], "tag": "不在本仓库" }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "研究目录树", "wraps": ["bar", "comp", "contract", "ds", "model", "signal"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "lab", "to": "bar", "label": "读写", "variant": "default" },
+    { "id": "c2", "from": "lab", "to": "comp", "label": "读写", "variant": "default" },
+    { "id": "c3", "from": "lab", "to": "contract", "variant": "default" },
+    { "id": "c4", "from": "lab", "to": "ds", "label": "pickle", "variant": "emphasis" },
+    { "id": "c5", "from": "lab", "to": "model", "label": "pickle", "variant": "emphasis" },
+    { "id": "c6", "from": "lab", "to": "signal", "label": "parquet", "variant": "emphasis" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "要点", "items": [
+      "统一管理K线/数据集/模型/信号",
+      "对象用pickle表格用parquet",
+      "成分用shelve缓存"
+    ]}
+  ]
+}

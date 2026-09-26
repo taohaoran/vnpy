@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "get_database 懒加载解析时序",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [
+      1080,
+      700
+    ]
+  },
+  "participants": [
+    {
+      "id": "caller",
+      "type": "external",
+      "label": "调用方"
+    },
+    {
+      "id": "factory",
+      "type": "backend",
+      "label": "get_database"
+    },
+    {
+      "id": "settings",
+      "type": "backend",
+      "label": "SETTINGS"
+    },
+    {
+      "id": "imp",
+      "type": "backend",
+      "label": "import系统"
+    },
+    {
+      "id": "driver",
+      "type": "external",
+      "label": "数据库驱动"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m1",
+      "from": "caller",
+      "to": "factory",
+      "y": 160,
+      "label": "get_database()",
+      "variant": "emphasis"
+    },
+    {
+      "id": "m2",
+      "from": "factory",
+      "to": "settings",
+      "y": 220,
+      "label": "读 database.name"
+    },
+    {
+      "id": "m3",
+      "from": "settings",
+      "to": "factory",
+      "y": 270,
+      "label": "返回库名",
+      "variant": "return"
+    },
+    {
+      "id": "m4",
+      "from": "factory",
+      "to": "imp",
+      "y": 330,
+      "label": "import_module(驱动)"
+    },
+    {
+      "id": "m5",
+      "from": "imp",
+      "to": "driver",
+      "y": 380,
+      "label": "加载驱动模块"
+    },
+    {
+      "id": "m6",
+      "from": "driver",
+      "to": "factory",
+      "y": 430,
+      "label": "返回模块",
+      "variant": "return"
+    },
+    {
+      "id": "m7",
+      "from": "factory",
+      "to": "driver",
+      "y": 490,
+      "label": "module.Database()"
+    },
+    {
+      "id": "m8",
+      "from": "driver",
+      "to": "factory",
+      "y": 540,
+      "label": "实例",
+      "variant": "return"
+    },
+    {
+      "id": "m9",
+      "from": "factory",
+      "to": "caller",
+      "y": 600,
+      "label": "返回BaseDatabase单例",
+      "variant": "return"
+    }
+  ]
+}

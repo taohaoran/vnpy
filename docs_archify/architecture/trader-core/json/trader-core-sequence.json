@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "trader-core 端到端下单时序",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [1080, 620]
+  },
+  "participants": [
+    { "id": "strategy", "type": "external", "label": "策略" },
+    { "id": "mainengine", "type": "backend", "label": "MainEngine" },
+    { "id": "conv", "type": "backend", "label": "换算器" },
+    { "id": "gw", "type": "external", "label": "网关" },
+    { "id": "ee", "type": "messagebus", "label": "EventEngine" },
+    { "id": "oms", "type": "backend", "label": "OmsEngine" }
+  ],
+  "messages": [
+    { "id": "m1", "from": "strategy", "to": "mainengine", "y": 160, "label": "send_order(req)", "variant": "emphasis" },
+    { "id": "m2", "from": "mainengine", "to": "conv", "y": 215, "label": "convert_order_request" },
+    { "id": "m3", "from": "conv", "to": "mainengine", "y": 270, "label": "拆分请求列表", "variant": "return" },
+    { "id": "m4", "from": "mainengine", "to": "gw", "y": 325, "label": "逐笔 send_order" },
+    { "id": "m5", "from": "gw", "to": "ee", "y": 380, "label": "on_order/on_trade" },
+    { "id": "m6", "from": "ee", "to": "oms", "y": 435, "label": "process 事件入库" },
+    { "id": "m7", "from": "ee", "to": "strategy", "y": 490, "label": "策略回调", "variant": "dashed" }
+  ]
+}

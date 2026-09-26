@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Alpha研究产物数据流图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [1200, 380]
+  },
+  "stages": [
+    { "label": "行情入库" },
+    { "label": "特征工程" },
+    { "label": "模型训练" },
+    { "label": "信号产出" },
+    { "label": "回测" }
+  ],
+  "nodes": [
+    { "id": "n1", "type": "database", "label": "K线parquet", "stage": 0, "row": 0 },
+    { "id": "n2", "type": "backend", "label": "AlphaDataset", "stage": 1, "row": 0 },
+    { "id": "n3", "type": "backend", "label": "AlphaModel", "stage": 2, "row": 0 },
+    { "id": "n4", "type": "database", "label": "信号parquet", "stage": 3, "row": 0 },
+    { "id": "n5", "type": "frontend", "label": "回测引擎", "stage": 4, "row": 0 }
+  ],
+  "flows": [
+    { "from": "n1", "to": "n2", "label": "BarData长表", "variant": "emphasis" },
+    { "from": "n2", "to": "n3", "label": "X/y矩阵", "variant": "emphasis" },
+    { "from": "n3", "to": "n4", "label": "predict", "variant": "emphasis" },
+    { "from": "n4", "to": "n5", "label": "signal_df", "variant": "emphasis" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "研究流水线", "items": [
+      "K线→因子→模型→信号→回测",
+      "各产物经AlphaLab持久化",
+      "TRAIN/VALID/TEST三段"
+    ]}
+  ]
+}

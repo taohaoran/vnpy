@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "K线更新渲染时序图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [1080, 700]
+  },
+  "participants": [
+    { "id": "ui", "type": "external", "label": "调用方" },
+    { "id": "w", "type": "frontend", "label": "ChartWidget" },
+    { "id": "m", "type": "database", "label": "BarManager" },
+    { "id": "it", "type": "backend", "label": "ChartItem" },
+    { "id": "q", "type": "external", "label": "Qt场景" }
+  ],
+  "messages": [
+    { "id": "m1", "from": "ui", "to": "w", "y": 160, "label": "update_history(bars)", "variant": "emphasis" },
+    { "id": "m2", "from": "w", "to": "m", "y": 225, "label": "update_history 排序建索引", "variant": "default" },
+    { "id": "m3", "from": "w", "to": "it", "y": 290, "label": "清图元缓存", "variant": "default" },
+    { "id": "m5", "from": "w", "to": "q", "y": 360, "label": "scene().update()", "variant": "emphasis" },
+    { "id": "m6", "from": "q", "to": "it", "y": 430, "label": "paint(exposedRect)", "variant": "emphasis" },
+    { "id": "m7", "from": "it", "to": "m", "y": 500, "label": "get_bar(ix)/范围", "variant": "default" },
+    { "id": "m8", "from": "it", "to": "q", "y": 570, "label": "play 合成图", "variant": "return" }
+  ]
+}

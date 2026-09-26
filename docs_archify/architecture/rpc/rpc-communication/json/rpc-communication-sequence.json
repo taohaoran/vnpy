@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "客户端-服务端 RPC 时序图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [1080, 760]
+  },
+  "participants": [
+    { "id": "biz", "type": "external", "label": "业务线程" },
+    { "id": "client", "type": "frontend", "label": "RpcClient" },
+    { "id": "req", "type": "messagebus", "label": "REQ/REP" },
+    { "id": "server", "type": "backend", "label": "RpcServer" },
+    { "id": "func", "type": "backend", "label": "注册函数" }
+  ],
+  "messages": [
+    { "id": "m1", "from": "biz", "to": "client", "y": 160, "label": "client.foo(args)", "variant": "emphasis" },
+    { "id": "m2", "from": "client", "to": "req", "y": 215, "label": "send_pyobj 请求", "variant": "default" },
+    { "id": "m3", "from": "req", "to": "server", "y": 270, "label": "recv_pyobj", "variant": "default" },
+    { "id": "m4", "from": "server", "to": "func", "y": 325, "label": "查表执行 func", "variant": "emphasis" },
+    { "id": "m5", "from": "func", "to": "server", "y": 380, "label": "返回结果 r", "variant": "return" },
+    { "id": "m6", "from": "server", "to": "req", "y": 435, "label": "[True, r] 回包", "variant": "default" },
+    { "id": "m7", "from": "req", "to": "client", "y": 490, "label": "poll 超时30s/recv", "variant": "default" },
+    { "id": "m8", "from": "client", "to": "biz", "y": 545, "label": "返回 r", "variant": "return" },
+    { "id": "m9", "from": "server", "to": "req", "y": 610, "label": "异常 [False, traceback]", "variant": "dashed" },
+    { "id": "m10", "from": "client", "to": "biz", "y": 670, "label": "抛 RemoteException", "variant": "dashed" }
+  ]
+}

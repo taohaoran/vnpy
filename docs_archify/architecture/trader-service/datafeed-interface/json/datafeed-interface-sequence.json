@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": { "title": "get_datafeed 解析时序", "quality_profile": "showcase", "locale": "zh-CN", "viewBox": [1080, 720] },
+  "participants": [
+    { "id": "caller", "type": "external", "label": "调用方" },
+    { "id": "factory", "type": "backend", "label": "get_datafeed" },
+    { "id": "settings", "type": "backend", "label": "SETTINGS" },
+    { "id": "imp", "type": "backend", "label": "import系统" },
+    { "id": "driver", "type": "external", "label": "数据服务驱动" }
+  ],
+  "messages": [
+    { "id": "m1", "from": "caller", "to": "factory", "y": 160, "label": "get_datafeed()", "variant": "emphasis" },
+    { "id": "m2", "from": "factory", "to": "settings", "y": 220, "label": "读 datafeed.name" },
+    { "id": "m3", "from": "settings", "to": "factory", "y": 270, "label": "返回名称", "variant": "return" },
+    { "id": "m4", "from": "factory", "to": "imp", "y": 330, "label": "import_module(驱动)" },
+    { "id": "m5", "from": "imp", "to": "driver", "y": 380, "label": "加载驱动模块" },
+    { "id": "m6", "from": "driver", "to": "factory", "y": 430, "label": "返回模块", "variant": "return" },
+    { "id": "m7", "from": "factory", "to": "driver", "y": 490, "label": "module.Datafeed()" },
+    { "id": "m8", "from": "driver", "to": "factory", "y": 540, "label": "实例", "variant": "return" },
+    { "id": "m9", "from": "factory", "to": "caller", "y": 600, "label": "返回BaseDatafeed单例", "variant": "return" }
+  ]
+}

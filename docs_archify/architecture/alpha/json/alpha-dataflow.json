@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "alpha 因子管线数据流图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [1200, 380]
+  },
+  "stages": [
+    { "label": "历史数据" },
+    { "label": "因子计算" },
+    { "label": "预处理" },
+    { "label": "模型预测" },
+    { "label": "回测交易" }
+  ],
+  "nodes": [
+    { "id": "n1", "type": "database", "label": "K线parquet", "stage": 0, "row": 0 },
+    { "id": "n2", "type": "backend", "label": "表达式并行算因子", "stage": 1, "row": 0 },
+    { "id": "n3", "type": "backend", "label": "processor标准化", "stage": 2, "row": 0 },
+    { "id": "n4", "type": "backend", "label": "模型fit/predict", "stage": 3, "row": 0 },
+    { "id": "n5", "type": "frontend", "label": "策略调仓回测", "stage": 4, "row": 0 }
+  ],
+  "flows": [
+    { "from": "n1", "to": "n2", "label": "多标的长表", "variant": "emphasis" },
+    { "from": "n2", "to": "n3", "label": "原始特征df", "variant": "emphasis" },
+    { "from": "n3", "to": "n4", "label": "TRAIN/VALID矩阵", "variant": "emphasis" },
+    { "from": "n4", "to": "n5", "label": "signal_df", "variant": "emphasis" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "离线研究管线", "items": [
+      "批量离线非实时",
+      "TRAIN/VALID/TEST三段",
+      "产出信号后回测"
+    ]}
+  ]
+}

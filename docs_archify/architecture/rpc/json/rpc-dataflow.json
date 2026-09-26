@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "RPC 数据流图",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "viewBox": [1200, 520]
+  },
+  "stages": [
+    { "label": "发起端" },
+    { "label": "序列化" },
+    { "label": "传输通道" },
+    { "label": "服务端处理" },
+    { "label": "回包/回调" }
+  ],
+  "nodes": [
+    { "id": "n1", "type": "frontend", "label": "远程调用请求", "stage": 0, "row": 0 },
+    { "id": "n2", "type": "backend", "label": "[name,args,kwargs]", "stage": 1, "row": 0 },
+    { "id": "n3", "type": "messagebus", "label": "REQ/REP 通道", "stage": 2, "row": 0 },
+    { "id": "n4", "type": "backend", "label": "查表执行函数", "stage": 3, "row": 0 },
+    { "id": "n5", "type": "frontend", "label": "回包结果", "stage": 4, "row": 0 },
+    { "id": "n6", "type": "backend", "label": "服务端 publish", "stage": 0, "row": 1 },
+    { "id": "n7", "type": "messagebus", "label": "PUB/SUB 通道", "stage": 2, "row": 1 },
+    { "id": "n8", "type": "frontend", "label": "客户端 callback", "stage": 4, "row": 1 }
+  ],
+  "flows": [
+    { "from": "n1", "to": "n2", "label": "pickle 序列化", "variant": "emphasis" },
+    { "from": "n2", "to": "n3", "label": "send_pyobj", "variant": "emphasis" },
+    { "from": "n3", "to": "n4", "label": "recv_pyobj", "variant": "default" },
+    { "from": "n4", "to": "n5", "label": "回包", "variant": "emphasis" },
+    { "from": "n6", "to": "n7", "label": "[topic,data]", "variant": "dashed" },
+    { "from": "n7", "to": "n8", "label": "分发", "variant": "dashed" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "两条数据流", "items": [
+      "上：同步请求-应答",
+      "下：异步发布-订阅",
+      "均基于 send_pyobj 序列化"
+    ]}
+  ]
+}
