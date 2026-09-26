@@ -1,0 +1,63 @@
+# GitHub Pages 部署 workflow（GitHub Actions 发布源）
+# 内容源优先级: 存在 docs_archify（archify 内容源）→ 站点严格按它部署；否则回退 docs
+# 导览与渲染强制: scripts/build-docs-html.py 将 md 渲染为 html 并生成三级中文导览 index.html + 左上角返回按钮
+name: Deploy vnpy docs to GitHub Pages
+
+on:
+  push:
+    branches: [feat-docs-20260926]
+    paths:
+      - 'docs/**'
+      - 'docs-archify/**'
+      - 'docs_archify/**'
+      - 'scripts/build-docs-html.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      # ---- 内容源选择：archify 源存在则严格按它部署，否则回退 docs ----
+      - name: Build site content (archify source priority)
+        run: |
+          set -euo pipefail
+          rm -rf site && mkdir -p site
+          if [ -d "docs-archify" ] || [ -d "docs_archify" ]; then
+            SRC=""
+            if [ -d "docs-archify" ]; then SRC="docs-archify"; else SRC="docs_archify"; fi
+            echo "==> $SRC found -> deploying its content strictly"
+            cp -R "$SRC/." site/
+          else
+            echo "==> no archify source dir found -> deploying docs"
+            cp -R docs/. site/
+          fi
+          # ---- md 默认转 html + 强制生成导览 index.md（链接全部 md 与 html）并渲染为 index.html ----
+          pip install --quiet markdown
+          python3 scripts/build-docs-html.py site --site-name "vnpy 架构文档" --group-label "architecture=架构" --label-map "architecture=架构|alpha=Alpha 策略|chart=图表|json=JSON|rpc=RPC|trader-core=交易核心|trader-service=交易服务|trader-ui=交易界面|_exploration=探索过程|system-overview=系统概览|system-architecture=系统架构|system-dataflow=系统数据流|system-trade-sequence=交易时序"
+          touch site/.nojekyll
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
